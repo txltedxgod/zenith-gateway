@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  zenith-gateway:
+    build: .
+    container_name: zenith-gateway
+    ports:
+      - "8000:8000"
+      - "9090:9090"
+    volumes:
+      - ./config:/zenith/config:ro
+    restart: unless-stopped

@@ -1,0 +1,39 @@
+server:
+  host: "0.0.0.0"
+  port: 8000
+  admin_port: 9090
+  workers: 8
+
+routes:
+  - id: "users-service"
+    path_prefix: "/api/v1/users"
+    upstream_url: "http://users-backend:8080"
+    methods: ["GET", "POST", "PUT", "DELETE"]
+    auth_required: false
+    rate_limit_tier: "standard"
+    timeout_ms: 3000
+
+  - id: "payments-service"
+    path_prefix: "/api/v1/payments"
+    upstream_url: "http://payments-backend:8080"
+    methods: ["POST"]
+    auth_required: true
+    rate_limit_tier: "strict"
+    timeout_ms: 5000
+
+rate_limits:
+  standard:
+    rate_per_second: 500
+    burst_capacity: 1000
+  strict:
+    rate_per_second: 50
+    burst_capacity: 100
+
+waf:
+  enabled: true
+  block_sqli: true
+  block_xss: true
+  block_path_traversal: true
+  blocked_ips:
+    - "198.51.100.4"
+    - "203.0.113.99"

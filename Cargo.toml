@@ -1,0 +1,20 @@
+[package]
+name = "zenith-gateway"
+version = "0.1.0"
+edition = "2021"
+authors = ["txltedxgod <txltedxgod@users.noreply.github.com>"]
+description = "Ultra-fast asynchronous cloud-native API Gateway and WAF in Rust with dynamic routing and rate limiting"
+license = "MIT"
+readme = "README.md"
+keywords = ["gateway", "proxy", "waf", "rust", "async"]
+
+[dependencies]
+tokio = { version = "1.38", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+regex = "1.10"
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1.0"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
