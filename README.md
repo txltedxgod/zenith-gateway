@@ -1,5 +1,11 @@
 # 🛡️ Zenith Gateway
 
+[![Rust CI](https://github.com/txltedxgod/zenith-gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/txltedxgod/zenith-gateway/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Rust 2021](https://img.shields.io/badge/rust-2021-DEA584.svg?logo=rust&logoColor=white)](https://www.rust-lang.org/)
+[![Axum](https://img.shields.io/badge/axum-async-000000.svg)](https://github.com/tokio-rs/axum)
+
+
 [![CI](https://github.com/txltedxgod/zenith-gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/txltedxgod/zenith-gateway/actions)
 [![Rust](https://img.shields.io/badge/Rust-1.75+-DEA584?logo=rust)](https://www.rust-lang.org)
 [![Tokio](https://img.shields.io/badge/Async-Tokio-brightgreen)](https://tokio.rs)
