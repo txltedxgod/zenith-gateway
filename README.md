@@ -1,5 +1,20 @@
 # 🛡️ Zenith Gateway
 
+```mermaid
+flowchart TD
+    Client([HTTP / WebSocket Client]) --> Ingress[Zenith Edge Ingress]
+    Ingress --> WAF{WAF Security Inspection}
+    WAF -- Block --> 403[403 Forbidden]
+    WAF -- Pass --> RateLimiter{Token Bucket Rate Limiter}
+    RateLimiter -- Exceeded --> 429[429 Too Many Requests]
+    RateLimiter -- Allowed --> Auth[JWT & RBAC Validator]
+    Auth --> Router[Dynamic Axum Routing Engine]
+    Router --> Svc1[Microservice A]
+    Router --> Svc2[Microservice B]
+    Router --> Svc3[Microservice C]
+```
+
+
 [![Rust CI](https://github.com/txltedxgod/zenith-gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/txltedxgod/zenith-gateway/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Rust 2021](https://img.shields.io/badge/rust-2021-DEA584.svg?logo=rust&logoColor=white)](https://www.rust-lang.org/)
