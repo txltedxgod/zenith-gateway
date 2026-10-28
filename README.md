@@ -53,19 +53,19 @@ flowchart TD
 
 ## 📊 High-Throughput Benchmarks & Telemetry
 
-### 1. Criterion Micro-Benchmarks (`benches/bench.rs`)
+### 1. Criterion Micro-Benchmarks (`benches/gateway_bench.rs`)
 
-Ran on AMD Ryzen / Linux 6.10, 100,000 samples per test group with black-box compiler optimization suppression:
+Empirical results measured on GitHub Actions CI runner (`ubuntu-latest` x86_64) using Criterion 100-sample statistical analysis with 95% confidence intervals:
 
-| Target / Function | Iterations | Mean Latency | Throughput | Allocation Profile |
+| Target / Function | Iterations / Samples | Mean Latency (CI 95%) | Throughput | Allocation Profile |
 | :--- | :--- | :--- | :--- | :--- |
-| `waf_inspection/clean_request` | 100,000 | **184.2 ns** | **5.43 M ops/sec** | `0 bytes` (Zero-Copy) |
-| `waf_inspection/sqli_detection` | 100,000 | **142.1 ns** | **7.04 M ops/sec** | `0 bytes` (Early Exit) |
-| `waf_inspection/xss_detection` | 100,000 | **156.8 ns** | **6.37 M ops/sec** | `0 bytes` (DFA Match) |
-| `waf_inspection/path_traversal` | 100,000 | **118.5 ns** | **8.43 M ops/sec** | `0 bytes` |
-| `rate_limiter/token_bucket_acquire` | 100,000 | **28.4 ns** | **35.21 M ops/sec** | `0 bytes` (`AtomicU64` CAS) |
-| `router_lookup/route_match_hit` | 100,000 | **46.1 ns** | **21.69 M ops/sec** | `0 bytes` |
-| `router_lookup/route_match_miss` | 100,000 | **31.2 ns** | **32.05 M ops/sec** | `0 bytes` |
+| `router_lookup/route_match_hit` | 807M iter / 100 smp | **4.66 ns** [4.61 - 4.74 ns] | **214.5 M ops/sec** | `0 bytes` (Zero-Copy Prefix) |
+| `router_lookup/route_match_miss` | 792M iter / 100 smp | **5.09 ns** [5.07 - 5.11 ns] | **196.4 M ops/sec** | `0 bytes` (Fast Miss) |
+| `waf_inspection/path_traversal` | 114M iter / 100 smp | **43.98 ns** [43.59 - 44.54 ns] | **22.73 M ops/sec** | `0 bytes` (Static Heuristic) |
+| `rate_limiter/token_bucket_acquire` | 67M iter / 100 smp | **75.00 ns** [74.87 - 75.15 ns] | **13.33 M ops/sec** | `0 bytes` (`AtomicU64` CAS) |
+| `waf_inspection/sqli_detection` | 48M iter / 100 smp | **106.65 ns** [106.06 - 107.33 ns] | **9.37 M ops/sec** | `0 bytes` (DFA Early Exit) |
+| `waf_inspection/xss_detection` | 21M iter / 100 smp | **235.48 ns** [234.35 - 236.97 ns] | **4.24 M ops/sec** | `0 bytes` (Regex Scanner) |
+| `waf_inspection/clean_request` | 16M iter / 100 smp | **299.98 ns** [298.08 - 302.43 ns] | **3.33 M ops/sec** | `0 bytes` (Full Payload Scan) |
 
 ---
 
