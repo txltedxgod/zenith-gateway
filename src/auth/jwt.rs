@@ -12,7 +12,7 @@ pub struct AuthValidator;
 impl AuthValidator {
     pub fn validate_header(auth_header: Option<&str>) -> Result<Claims, String> {
         let header = auth_header.ok_or_else(|| "Missing Authorization header".to_string())?;
-        
+
         if !header.starts_with("Bearer ") {
             return Err("Invalid token format, expected 'Bearer <token>'".to_string());
         }

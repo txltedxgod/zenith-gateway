@@ -34,7 +34,14 @@ impl WafEngine {
         }
     }
 
-    pub fn inspect(&self, path: &str, query: &str, body: &str, ip: &str, blocked_ips: &[String]) -> WafDecision {
+    pub fn inspect(
+        &self,
+        path: &str,
+        query: &str,
+        body: &str,
+        ip: &str,
+        blocked_ips: &[String],
+    ) -> WafDecision {
         // 1. Check IP Blocklist
         if blocked_ips.iter().any(|b| b == ip) {
             return WafDecision::Block(format!("IP address {} is blacklisted", ip));
@@ -46,12 +53,18 @@ impl WafEngine {
         }
 
         // 3. SQL Injection
-        if self.sqli_regex.is_match(path) || self.sqli_regex.is_match(query) || self.sqli_regex.is_match(body) {
+        if self.sqli_regex.is_match(path)
+            || self.sqli_regex.is_match(query)
+            || self.sqli_regex.is_match(body)
+        {
             return WafDecision::Block("SQL Injection signature detected".to_string());
         }
 
         // 4. Cross-Site Scripting (XSS)
-        if self.xss_regex.is_match(path) || self.xss_regex.is_match(query) || self.xss_regex.is_match(body) {
+        if self.xss_regex.is_match(path)
+            || self.xss_regex.is_match(query)
+            || self.xss_regex.is_match(body)
+        {
             return WafDecision::Block("Cross-Site Scripting (XSS) signature detected".to_string());
         }
 
