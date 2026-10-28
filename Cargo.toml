@@ -8,6 +8,14 @@ license = "MIT"
 readme = "README.md"
 keywords = ["gateway", "proxy", "waf", "rust", "async"]
 
+[lib]
+name = "zenith_gateway"
+path = "src/lib.rs"
+
+[[bin]]
+name = "zenith-gateway"
+path = "src/main.rs"
+
 [dependencies]
 tokio = { version = "1.38", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
@@ -18,3 +26,10 @@ chrono = { version = "0.4", features = ["serde"] }
 thiserror = "1.0"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["async_tokio", "html_reports"] }
+
+[[bench]]
+name = "gateway_bench"
+harness = false

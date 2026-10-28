@@ -1,33 +1,49 @@
-// Zenith Gateway - Rate Limiter Integration Tests
+use std::sync::Arc;
+use zenith_gateway::limiter::{RateLimiterManager, TokenBucket};
 
-#[cfg(test)]
-mod tests {
-    #[derive(Debug, Clone)]
-    pub struct TokenBucket {
-        capacity: u64,
-        available: u64,
+#[tokio::test]
+async fn test_token_bucket_replenish_and_consume() {
+    let bucket = TokenBucket::new(100, 10);
+
+    // Initial consume within capacity
+    assert!(bucket.check_and_consume(5).await);
+    assert!(bucket.check_and_consume(5).await);
+
+    // Exceeded capacity
+    assert!(!bucket.check_and_consume(1).await);
+}
+
+#[tokio::test]
+async fn test_rate_limiter_manager_tiers() {
+    let manager = RateLimiterManager::new();
+
+    // Standard client check
+    let allowed = manager.check_rate_limit("client-ip-123", "standard").await;
+    assert!(allowed);
+
+    // Unknown tier fallback
+    let fallback = manager.check_rate_limit("client-ip-456", "non_existent_tier").await;
+    assert!(fallback);
+}
+
+#[tokio::test]
+async fn test_high_concurrency_token_acquisition() {
+    let bucket = Arc::new(TokenBucket::new(100_000, 50));
+    let mut handles = Vec::new();
+
+    for _ in 0..50 {
+        let b = bucket.clone();
+        handles.push(tokio::spawn(async move {
+            b.check_and_consume(1).await
+        }));
     }
 
-    impl TokenBucket {
-        pub fn new(capacity: u64) -> Self {
-            Self { capacity, available: capacity }
+    let mut success_count = 0;
+    for h in handles {
+        if h.await.unwrap() {
+            success_count += 1;
         }
-
-        pub fn try_acquire(&mut self, tokens: u64) -> bool {
-            if self.available >= tokens {
-                self.available -= tokens;
-                true
-            } else {
-                false
-            }
-        }
     }
 
-    #[test]
-    fn test_token_bucket_acquire() {
-        let mut bucket = TokenBucket::new(10);
-        assert!(bucket.try_acquire(5));
-        assert!(bucket.try_acquire(5));
-        assert!(!bucket.try_acquire(1));
-    }
+    assert_eq!(success_count, 50);
 }

@@ -1,4 +1,4 @@
-name: Rust CI
+name: Zenith CI & Benchmarks
 
 on:
   push:
@@ -7,10 +7,45 @@ on:
     branches: [ main ]
 
 jobs:
-  check:
+  test:
+    name: Test & Lint Suite
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - name: Cargo Check
-        run: cargo check || true
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Check Formatting
+        run: cargo fmt --all -- --check
+
+      - name: Clippy Linter
+        run: cargo clippy --all-targets --all-features -- -D warnings
+
+      - name: Run Unit & Integration Tests
+        run: cargo test --all --verbose
+
+      - name: Compile & Verify Benchmark Harness
+        run: cargo bench --bench gateway_bench -- --test
+
+  benchmark:
+    name: Run Criterion Benchmarks
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run Criterion Benchmarks
+        run: cargo bench --bench gateway_bench -- --verbose

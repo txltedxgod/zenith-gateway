@@ -1,19 +1,12 @@
-mod auth;
-mod config;
-mod limiter;
-mod metrics;
-mod router;
-mod waf;
-
-use config::GatewayConfig;
-use limiter::RateLimiterManager;
-use metrics::MetricsRegistry;
-use router::Router;
 use std::sync::Arc;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpListener;
 use tracing::{error, info};
-use waf::{WafDecision, WafEngine};
+use zenith_gateway::config::GatewayConfig;
+use zenith_gateway::limiter::RateLimiterManager;
+use zenith_gateway::metrics::MetricsRegistry;
+use zenith_gateway::router::Router;
+use zenith_gateway::waf::{WafDecision, WafEngine};
 
 const BANNER: &str = r#"
   ______            _ _   _        _____       _                            
