@@ -92,4 +92,13 @@ impl RateLimiterManager {
 
         bucket.check_and_consume(1).await
     }
+
+    pub async fn check_rate_limit(&self, client_key: &str, tier: &str) -> bool {
+        let (rate, burst) = match tier {
+            "premium" => (10_000, 1_000),
+            "standard" => (1_000, 100),
+            _ => (500, 50),
+        };
+        self.acquire(client_key, rate, burst).await
+    }
 }
