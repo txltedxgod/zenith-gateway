@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpListener;
-use tracing::{error, info};
+use tracing::info;
 use zenith_gateway::config::GatewayConfig;
 use zenith_gateway::limiter::RateLimiterManager;
 use zenith_gateway::metrics::MetricsRegistry;
