@@ -84,7 +84,11 @@ fn bench_router(c: &mut Criterion) {
             id: "orders-service".to_string(),
             path_prefix: "/api/orders".to_string(),
             upstream_url: "http://127.0.0.1:8082".to_string(),
-            methods: Some(vec!["GET".to_string(), "POST".to_string(), "DELETE".to_string()]),
+            methods: Some(vec![
+                "GET".to_string(),
+                "POST".to_string(),
+                "DELETE".to_string(),
+            ]),
             strip_prefix: Some(true),
             auth_required: Some(true),
             rate_limit_tier: Some("premium".to_string()),
@@ -107,12 +111,7 @@ fn bench_router(c: &mut Criterion) {
     let mut group = c.benchmark_group("router_lookup");
 
     group.bench_function("route_match_hit", |b| {
-        b.iter(|| {
-            router.match_route(
-                black_box("/api/users/12345/profile"),
-                black_box("GET"),
-            )
-        })
+        b.iter(|| router.match_route(black_box("/api/users/12345/profile"), black_box("GET")))
     });
 
     group.bench_function("route_match_miss", |b| {

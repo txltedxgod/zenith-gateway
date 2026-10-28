@@ -61,18 +61,16 @@ mod tests {
 
     #[test]
     fn test_router_matching() {
-        let routes = vec![
-            RouteConfig {
-                id: "users".to_string(),
-                path_prefix: "/api/users".to_string(),
-                upstream_url: "http://127.0.0.1:8081".to_string(),
-                methods: Some(vec!["GET".to_string(), "POST".to_string()]),
-                strip_prefix: None,
-                auth_required: None,
-                rate_limit_tier: None,
-                timeout_ms: None,
-            },
-        ];
+        let routes = vec![RouteConfig {
+            id: "users".to_string(),
+            path_prefix: "/api/users".to_string(),
+            upstream_url: "http://127.0.0.1:8081".to_string(),
+            methods: Some(vec!["GET".to_string(), "POST".to_string()]),
+            strip_prefix: None,
+            auth_required: None,
+            rate_limit_tier: None,
+            timeout_ms: None,
+        }];
         let router = Router::new(routes);
 
         assert!(router.match_route("/api/users/profile", "GET").is_some());

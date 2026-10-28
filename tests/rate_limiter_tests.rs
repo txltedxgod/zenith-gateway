@@ -22,7 +22,9 @@ async fn test_rate_limiter_manager_tiers() {
     assert!(allowed);
 
     // Unknown tier fallback
-    let fallback = manager.check_rate_limit("client-ip-456", "non_existent_tier").await;
+    let fallback = manager
+        .check_rate_limit("client-ip-456", "non_existent_tier")
+        .await;
     assert!(fallback);
 }
 
@@ -33,9 +35,7 @@ async fn test_high_concurrency_token_acquisition() {
 
     for _ in 0..50 {
         let b = bucket.clone();
-        handles.push(tokio::spawn(async move {
-            b.check_and_consume(1).await
-        }));
+        handles.push(tokio::spawn(async move { b.check_and_consume(1).await }));
     }
 
     let mut success_count = 0;
