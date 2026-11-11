@@ -1,4 +1,5 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{criterion_group, criterion_main, Criterion};
+use std::hint::black_box;
 use std::sync::Arc;
 use zenith_gateway::config::RouteConfig;
 use zenith_gateway::limiter::TokenBucket;
