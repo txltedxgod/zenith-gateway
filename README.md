@@ -9,6 +9,17 @@
 
 ---
 
+## 🎬 Feature Demo
+
+<p align="center">
+  <img src="assets/demo.gif" alt="Zenith Gateway Security & Routing Pipeline Demo" width="840" />
+</p>
+<p align="center">
+  <sub><a href="assets/demo.mp4">Watch / Download 1080p60 MP4</a></sub>
+</p>
+
+---
+
 ## 🏛️ Pipeline Architecture
 
 ```mermaid
